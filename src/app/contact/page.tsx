@@ -67,7 +67,8 @@ export default function ContactPage() {
                 <div>
                   <h3 className="text-[#efda9b] font-semibold font-cinzel mb-1">Office Location</h3>
                   <p className="text-[#e7b980]">BRAC University</p>
-                  <p className="text-[#e7b980] text-sm">66 Mohakhali, Dhaka 1212, Bangladesh</p>
+                  <p className="text-[#e7b980] text-sm">Kha 226, Bir Uttam Rafiqul Islam Ave,
+                  Badda, Dhaka 1212</p>
                 </div>
               </div>
 
