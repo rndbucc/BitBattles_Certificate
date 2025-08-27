@@ -48,7 +48,7 @@ export default function ContactPage() {
                   <h3 className="text-[#efda9b] font-semibold font-cinzel mb-1">
                     Email Support
                   </h3>
-                  <p className="text-[#e7b980]">support@bracucc.org</p>
+                  <p className="text-[#e7b980]">r&d.bucc@gmail.com</p>
                   <p className="text-[#e7b980] text-sm">
                     We typically respond within 24 hours
                   </p>
