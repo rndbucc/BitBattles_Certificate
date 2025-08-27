@@ -25,7 +25,8 @@ export default function IdSubmissionForm() {
       return toast.error("Something went wrong");
     }
 
-    router.push(`/${id}`);
+    // Route to loading screen first
+    router.push(`/loading/${id}`);
   };
   
   return (
