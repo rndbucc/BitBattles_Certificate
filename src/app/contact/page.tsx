@@ -63,7 +63,7 @@ export default function ContactPage() {
                   <h3 className="text-[#efda9b] font-semibold font-cinzel mb-1">
                     Phone Support
                   </h3>
-                  <p className="text-[#e7b980]">+880 1234-567890</p>
+                  <p className="text-[#e7b980]">+8801756020067</p>
                   <p className="text-[#e7b980] text-sm">
                     Available during office hours
                   </p>
@@ -80,7 +80,7 @@ export default function ContactPage() {
                   </h3>
                   <p className="text-[#e7b980]">BRAC University</p>
                   <p className="text-[#e7b980] text-sm">
-                    66 Mohakhali, Dhaka 1212, Bangladesh
+                    Kha 226, Bir Uttam Rafiqul Islam Ave, Badda, Dhaka 1212
                   </p>
                 </div>
               </div>
