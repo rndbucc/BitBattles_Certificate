@@ -1,14 +1,35 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getTotalCertificates } from "@/lib/database";
 import { Award, Users, Calendar } from "lucide-react";
+import { ICertificate } from "@/lib/Certificate";
 
 export default function CertificateStats() {
   const [totalCertificates, setTotalCertificates] = useState(0);
+  const [bracuStudents, setBracuStudents] = useState(0);
+  const [externalParticipants, setExternalParticipants] = useState(0);
 
   useEffect(() => {
-    setTotalCertificates(getTotalCertificates());
+    const fetchStats = async () => {
+      try {
+        const res = await fetch("/api/get-certificates");
+        const data: ICertificate[] = await res.json();
+
+        setTotalCertificates(data.length);
+        setBracuStudents(
+          data.filter((c) => c["Recipient Email"].includes("@g.bracu.ac.bd"))
+            .length
+        );
+        setExternalParticipants(
+          data.filter((c) => !c["Recipient Email"].includes("@g.bracu.ac.bd"))
+            .length
+        );
+      } catch (error) {
+        console.error("Failed to fetch certificate stats:", error);
+      }
+    };
+
+    fetchStats();
   }, []);
 
   return (
@@ -34,9 +55,9 @@ export default function CertificateStats() {
           </div>
           <div>
             <h3 className="text-2xl font-bold text-[#efda9b] font-kragx">
-              {totalCertificates}
+              {bracuStudents}
             </h3>
-            <p className="text-[#e7b980] font-cinzel">Recipients</p>
+            <p className="text-[#e7b980] font-cinzel">BRACU Students</p>
           </div>
         </div>
       </div>
@@ -48,9 +69,9 @@ export default function CertificateStats() {
           </div>
           <div>
             <h3 className="text-2xl font-bold text-[#efda9b] font-kragx">
-              2025
+              {externalParticipants}
             </h3>
-            <p className="text-[#e7b980] font-cinzel">Issue Year</p>
+            <p className="text-[#e7b980] font-cinzel">External Participants</p>
           </div>
         </div>
       </div>

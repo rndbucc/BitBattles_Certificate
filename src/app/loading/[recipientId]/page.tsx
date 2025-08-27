@@ -11,7 +11,6 @@ export default function LoadingScreen({
   const router = useRouter();
   const [progress, setProgress] = useState(0);
 
-  // Generate pseudo-random matrix lines once
   const matrixLines = useMemo(() => {
     const characters = "01ABCDEFGHIJKLMNOPQRSTUVWXYZ#$%*@";
     const lines: string[] = [];
@@ -65,7 +64,10 @@ export default function LoadingScreen({
 
       {/* Matrix rain layer (lightweight loop) */}
       <div className="absolute inset-0 pointer-events-none select-none [mask-image:linear-gradient(180deg,transparent,black_20%,black_80%,transparent)]">
-        <div className="absolute w-full h-full" style={{ transform: "translateZ(0)" }}>
+        <div
+          className="absolute w-full h-full"
+          style={{ transform: "translateZ(0)" }}
+        >
           {matrixLines.map((line, idx) => (
             <div
               key={idx}
@@ -88,8 +90,12 @@ export default function LoadingScreen({
       {/* Content */}
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4">
         <div className="text-center mb-8">
-          <h1 className="title-kragx text-3xl sm:text-4xl mb-2">Initializing Secure Lookup</h1>
-          <p className="font-cinzel text-[#efda9b]/80">Establishing connection to certificate vault…</p>
+          <h1 className="title-kragx text-3xl sm:text-4xl mb-2">
+            Initializing Secure Lookup
+          </h1>
+          <p className="font-cinzel text-[#efda9b]/80">
+            Establishing connection to certificate vault…
+          </p>
         </div>
 
         {/* Loading bar */}

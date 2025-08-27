@@ -1,6 +1,7 @@
+import dbConnect from "@/lib/dbConnect";
+import { Certificate } from "@/lib/Certificate";
 import CopyButton from "@/components/CopyButton";
 import ShareDialogue from "@/components/ShareDialogue";
-import { findCertificateById } from "@/lib/database";
 import Image from "next/image";
 import Link from "next/link";
 import { FaFacebookF, FaLinkedinIn } from "react-icons/fa";
@@ -9,11 +10,15 @@ import { IoShareSocialOutline } from "react-icons/io5";
 export default async function CertificatePage({
   params,
 }: {
-  params: Promise<{ recipientId: string }>;
+  params: { recipientId: string };
 }) {
-  const recipientId = (await params).recipientId;
+  const recipientId = params.recipientId;
 
-  const recipientData = findCertificateById(recipientId);
+  await dbConnect();
+
+  const recipientData = await Certificate.findOne({
+    "Recipient ID": recipientId,
+  }).lean();
 
   if (!recipientData) {
     return (
@@ -36,27 +41,26 @@ export default async function CertificatePage({
       <div className="relative z-10 flex flex-col lg:flex-row w-full h-auto lg:h-[100vh] items-center p-4 lg:p-8 gap-6">
         {/* Certificate Preview */}
         <div className="w-full lg:w-[50%] h-auto lg:h-full flex items-center justify-center">
-          {recipientData && (
-            <div className="w-full h-full flex items-center justify-center">
-              <div className="relative p-4 border-2 border-[#a06937] rounded-lg overflow-hidden
-                             bg-gradient-to-b from-[#3a1e10]/70 to-[#3a1e10]/90
-                             shadow-[0_0_15px_rgba(160,105,55,0.5)]">
-                <Image
-                  src={recipientData["Preview Link"]}
-                  alt={"certificate"}
-                  width={700}
-                  height={700}
-                  className="object-contain rounded-lg max-w-full"
-                />
-                
-                {/* Decorative corner elements */}
-                <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-[#ffd700]"></div>
-                <div className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-[#ffd700]"></div>
-                <div className="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-[#ffd700]"></div>
-                <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-[#ffd700]"></div>
-              </div>
+          <div className="w-full h-full flex items-center justify-center">
+            <div
+              className="relative p-4 border-2 border-[#a06937] rounded-lg overflow-hidden
+                            bg-gradient-to-b from-[#3a1e10]/70 to-[#3a1e10]/90
+                            shadow-[0_0_15px_rgba(160,105,55,0.5)]"
+            >
+              <Image
+                src={recipientData["Preview Link"]}
+                alt="certificate"
+                width={700}
+                height={700}
+                className="object-contain rounded-lg max-w-full"
+              />
+              {/* Decorative corner elements */}
+              <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-[#ffd700]"></div>
+              <div className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-[#ffd700]"></div>
+              <div className="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-[#ffd700]"></div>
+              <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-[#ffd700]"></div>
             </div>
-          )}
+          </div>
         </div>
 
         {/* Recipient Info */}
@@ -70,30 +74,28 @@ export default async function CertificatePage({
               <div className="flex flex-col gap-4">
                 <div className="flex items-start justify-between border-b border-[#a06937] pb-2 font-cinzel">
                   <p>Recipient Name</p>
-                  <p>{recipientData ? recipientData["Recipient Name"] : "N/A"}</p>
+                  <p>{recipientData["Recipient Name"]}</p>
                 </div>
                 <div className="flex items-start justify-between border-b border-[#a06937] pb-2 font-cinzel">
                   <p>Certificate ID</p>
-                  <p>{recipientData ? recipientData["Recipient ID"] : "N/A"}</p>
+                  <p>{recipientData["Recipient ID"]}</p>
                 </div>
                 <div className="flex items-start justify-between border-b border-[#a06937] pb-2 font-cinzel">
                   <p>Issue Date</p>
                   <p>
-                    {recipientData
-                      ? new Date(recipientData["Issue Date"]).toLocaleDateString(
-                          "en-US",
-                          {
-                            day: "2-digit",
-                            month: "long",
-                            year: "numeric",
-                          }
-                        )
-                      : "N/A"}
+                    {new Date(recipientData["Issue Date"]).toLocaleDateString(
+                      "en-US",
+                      {
+                        day: "2-digit",
+                        month: "long",
+                        year: "numeric",
+                      }
+                    )}
                   </p>
                 </div>
                 <div className="flex items-start justify-between border-b border-[#a06937] pb-2 font-cinzel">
                   <p>Email</p>
-                  <p>{recipientData ? recipientData["Recipient Email"] : "N/A"}</p>
+                  <p>{recipientData["Recipient Email"]}</p>
                 </div>
               </div>
             </div>

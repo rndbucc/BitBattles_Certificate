@@ -1,25 +1,36 @@
-import { findCertificateById } from "@/lib/database";
 import { NextRequest, NextResponse } from "next/server";
+import dbConnect from "@/lib/dbConnect";
+import { Certificate } from "@/lib/Certificate";
 
-// Submit ID handler / Get Certificate from Id
 export async function POST(request: NextRequest) {
-  const body = await request.json();
+  try {
+    const body = await request.json();
 
-  if (!body.recipientId) {
-    return NextResponse.json({ error: "ID is required" }, { status: 400 });
-  }
+    if (!body.recipientId) {
+      return NextResponse.json({ error: "ID is required" }, { status: 400 });
+    }
 
-  // Find certificate in JSON database
-  const recipientData = findCertificateById(body.recipientId);
+    await dbConnect();
 
-  if (recipientData) {
-    return NextResponse.redirect(
-      new URL(`/${recipientData["Recipient ID"]}`, request.nextUrl)
-    );
-  } else {
+    const recipientData = await Certificate.findOne({
+      "Recipient ID": body.recipientId,
+    }).lean();
+
+    if (recipientData) {
+      return NextResponse.redirect(
+        new URL(`/${recipientData["Recipient ID"]}`, request.nextUrl)
+      );
+    } else {
+      return NextResponse.json(
+        { error: "No Recipient under this ID found!" },
+        { status: 400 }
+      );
+    }
+  } catch (err) {
+    console.error("Error in POST /api/find-certificate:", err);
     return NextResponse.json(
-      { error: "No Recipient under this ID found!" },
-      { status: 400 }
+      { error: "Internal Server Error" },
+      { status: 500 }
     );
   }
 }
